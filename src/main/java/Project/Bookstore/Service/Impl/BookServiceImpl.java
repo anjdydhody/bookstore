@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +48,24 @@ public class BookServiceImpl implements BookService {
                 optionalBook.get().getAuthor(),
                 optionalBook.get().getDescription()
         ), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<BookGetRes>> getList() {
+        List<BookGetRes> bookGetResList = new ArrayList<>();
+        List<Book> bookList = bookRepository.findAll();
+
+        for (Book book : bookList) {
+            bookGetResList.add(new BookGetRes(
+                    book.getId(),
+                    book.getImageNum(),
+                    book.getTitle(),
+                    book.getPrice(),
+                    book.getAuthor(),
+                    book.getDescription()
+            ));
+        }
+
+        return new ResponseEntity<>(bookGetResList, HttpStatus.OK);
     }
 }

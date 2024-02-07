@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/books")
 @RequiredArgsConstructor
@@ -22,5 +24,10 @@ public class BookController {
     @GetMapping
     public ResponseEntity<BookGetRes> get(@RequestParam Integer id) {
         return bookService.get(id);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<BookGetRes>> getList() {
+        return bookService.getList();
     }
 }
