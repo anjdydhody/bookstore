@@ -19,7 +19,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String imageNum;
+    private String imagePath;
     private String title;
     private Integer price;
     private String author;
