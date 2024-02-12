@@ -28,13 +28,15 @@ import java.util.UUID;
 public class BookServiceImpl implements BookService {
     @Value("${upload.path}")
     private String uploadPath;
+    @Value("${site.path}")
+    private String sitePath;
     private final BookRepository bookRepository;
 
     @Override
     public ResponseEntity<HttpStatus> post(BookPostReq bookPostReq, MultipartFile image) {
-        String imagePath = saveImage(image);
+        String imageName = saveImage(image);
         bookRepository.save(Book.builder()
-                .imagePath(imagePath)
+                .imagePath(sitePath + imageName)
                 .title(bookPostReq.getTitle())
                 .price(bookPostReq.getPrice())
                 .author(bookPostReq.getAuthor())
@@ -83,8 +85,9 @@ public class BookServiceImpl implements BookService {
 
     private String saveImage(MultipartFile image) {
         String originalName = image.getOriginalFilename();
-        String newName = uploadPath + UUID.randomUUID() + "." + StringUtils.getFilenameExtension(originalName);
-        Path filePath = Paths.get(newName);
+        String newName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(originalName);
+        String newPath = uploadPath + newName;
+        Path filePath = Paths.get(newPath);
 
         try {
             Files.copy(image.getInputStream(), filePath);
