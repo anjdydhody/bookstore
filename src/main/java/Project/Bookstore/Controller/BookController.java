@@ -49,4 +49,14 @@ public class BookController {
     public ResponseEntity<List<BookGetRes>> getList() {
         return bookService.getList();
     }
+
+    @DeleteMapping
+    @Operation(summary = "책 정보 id로 검색해서 삭제 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 id")
+    })
+    public ResponseEntity<HttpStatus> delete(@RequestParam Integer id) {
+        return bookService.delete(id);
+    }
 }

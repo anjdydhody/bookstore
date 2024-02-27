@@ -15,4 +15,6 @@ public interface BookService {
     ResponseEntity<BookGetRes> get(Integer id);
 
     ResponseEntity<List<BookGetRes>> getList();
+
+    ResponseEntity<HttpStatus> delete(Integer id);
 }

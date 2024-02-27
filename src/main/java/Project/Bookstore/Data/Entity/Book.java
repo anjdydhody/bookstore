@@ -24,4 +24,5 @@ public class Book {
     private Integer price;
     private String author;
     private String description;
+    private Boolean deleted;
 }

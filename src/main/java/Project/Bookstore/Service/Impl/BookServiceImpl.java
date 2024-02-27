@@ -41,6 +41,7 @@ public class BookServiceImpl implements BookService {
                 .price(bookPostReq.getPrice())
                 .author(bookPostReq.getAuthor())
                 .description(bookPostReq.getDescription())
+                .deleted(Boolean.FALSE)
                 .build()
         );
 
@@ -49,7 +50,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public ResponseEntity<BookGetRes> get(Integer id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
+        Optional<Book> optionalBook = bookRepository.findByIdAndDeleted(id, Boolean.FALSE);
 
         if (optionalBook.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,7 +68,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<List<BookGetRes>> getList() {
         List<BookGetRes> bookGetResList = new ArrayList<>();
-        List<Book> bookList = bookRepository.findAll();
+        List<Book> bookList = bookRepository.findAllByDeleted(Boolean.FALSE);
 
         for (Book book : bookList) {
             bookGetResList.add(new BookGetRes(
@@ -81,6 +82,19 @@ public class BookServiceImpl implements BookService {
         }
 
         return new ResponseEntity<>(bookGetResList, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> delete(Integer id) {
+        Optional<Book> optionalBook = bookRepository.findByIdAndDeleted(id, Boolean.FALSE);
+
+        if (optionalBook.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        optionalBook.get().setDeleted(Boolean.TRUE);
+        bookRepository.save(optionalBook.get());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private String saveImage(MultipartFile image) {
