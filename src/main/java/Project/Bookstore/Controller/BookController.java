@@ -6,6 +6,7 @@ import Project.Bookstore.Service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,10 @@ public class BookController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "책 정보 게시 API")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공")
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "400", description = "null은 허용되지 않음")
     })
-    public ResponseEntity<HttpStatus> post(@ParameterObject @ModelAttribute BookPostReq bookPostReq, @RequestPart MultipartFile image) {
+    public ResponseEntity<HttpStatus> post(@ParameterObject @ModelAttribute @Valid BookPostReq bookPostReq, @RequestPart MultipartFile image) {
         return bookService.post(bookPostReq, image);
     }
 
